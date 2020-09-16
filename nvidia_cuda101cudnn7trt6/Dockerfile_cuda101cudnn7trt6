@@ -41,6 +41,8 @@ RUN set -x \
     
     
 # Install TRT-6.0
+# YOU SHOULD HAVE THE TENSORRT INSTALLMENT FILES AT SPECIFIC PATH.
+
 COPY ./TensorRT-6.0.1.5  /root/TensorRT-6.0.1.5
 
 RUN set -x && \
