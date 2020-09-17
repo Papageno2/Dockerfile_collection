@@ -1,9 +1,13 @@
 FROM tensorflow/tensorflow:1.15.2-gpu-py3
 
-ARG DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Shanghai
 
 # Install apt dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt list --upgradable \
+    && apt upgrade -y \
+    && apt-get update \
+    && apt-get install -y \
     git \
     gpg-agent \
     python3-cairocffi \
@@ -13,29 +17,36 @@ RUN apt-get update && apt-get install -y \
     python3-tk \
     wget
 
-# Add new user to avoid running as root
-RUN useradd -ms /bin/bash tensorflow
-USER tensorflow
-WORKDIR /home/tensorflow
+# # Add new user to avoid running as root
+# RUN useradd -ms /bin/bash tensorflow
+# USER tensorflow
+# WORKDIR /home/tensorflow
 
-# Copy this version of of the model garden into the image
-COPY --chown=tensorflow ./models /home/tensorflow/models
+# # Copy this version of of the model garden into the image
+# COPY --chown=tensorflow ./models /home/tensorflow/models
+ COPY ./models /home/tensorflow/models
 
-# download tfod repo.
-# RUN set -x \
-#     && mkdir /home/tmp \
-#     && cd /home/tmp \ 
-#     && git clone https://github.com/tensorflow/models.git
+# use tsinghua mirror
+# RUN python -m pip install --user -U pip -i https://pypi.tuna.tsinghua.edu.cn/simple
+# RUN python -m pip install -U pip -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install cmake cython -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+# for the fucking pycocotools
+COPY ./cocoapi /home/tmp/cocoapi
+
+WORKDIR /home/tmp/cocoapi/PythonAPI
+
+RUN make \
+    && cp -r pycocotools/ /home/tensorflow/models/research/
 
 # Compile protobuf configs
-RUN (cd /home/tensorflow/models/research/ && protoc object_detection/protos/*.proto --python_out=.)
 WORKDIR /home/tensorflow/models/research/
+RUN protoc object_detection/protos/*.proto --python_out=.
 
 RUN cp object_detection/packages/tf1/setup.py ./
 ENV PATH="/home/tensorflow/.local/bin:${PATH}"
 
-# use tsinghua mirror
-RUN python -m pip install --user -U pip -i https://pypi.tuna.tsinghua.edu.cn/simple
-RUN set -x; python -m pip install --user . -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install . --use-feature=2020-resolver -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 ENV TF_CPP_MIN_LOG_LEVEL 3
