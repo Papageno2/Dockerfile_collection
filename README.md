@@ -34,7 +34,14 @@ docker run -itd -p 11221:5000 --name yolotrt512 --gpus '"device=5"' yolov4/deplo
 or using `yolov4-608`.
 
 ### TFOD1.15.2
-refer to [tensorflow/models](https://github.com/tensorflow/models/tree/master/research/object_detection)
+
+build the image like (see [veri.md](tfod1.15.2/veri.md)):
+
+```shell
+docker build -t tfod:1.15.2 -f Dockerfile .
+```
+
+other tfod details, please refer to [tensorflow/models](https://github.com/tensorflow/models/tree/master/research/object_detection)
 
 - https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf1.md
 
