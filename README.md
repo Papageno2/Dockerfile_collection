@@ -5,7 +5,7 @@ collection of Dockerfile.
 
 - [x]  cuda10.1-cudnn7-tenorrt6.0.1.5
 - [x] Yolov4-trt-deployment
-- [ ] YOLOv4-darknet: `train/detect`
+- [x] YOLOv4-darknet: `train/detect`
   - For YOLOv4-darknet model training
   - For YOLOv4-darknet model deploy
 - [x] tfod-train-1.15.2
