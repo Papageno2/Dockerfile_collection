@@ -35,6 +35,35 @@ docker run -itd -p 11221:5000 --name yolotrt512 --gpus '"device=5"' yolov4/deplo
 
 or using `yolov4-608`.
 
+
+
+*file structure*:
+
+```shell
+├── deploy
+│   ├── Dockerfile
+│   └── deploy-standalone
+│       ├── deploy_flaskAPI.py
+│       ├── model
+│       │   ├── libyolo_layer.so
+│       │   ├── yolov4-416.trt
+│       │   ├── yolov4-512.trt
+│       │   └── yolov4-608.trt
+│       ├── pets.jpeg
+│       ├── this_is_a_test.jpg
+│       ├── thisis_test_.jpg
+│       ├── trt_yolo.py
+│       └── utils
+│           ├── visualization.py
+│           ├── yolo_class.py
+│           ├── yolo_classes.py
+│           └── yolo_with_plugins.py
+```
+
+
+
+
+
 ### TFOD1.15.2
 
 build the image like (see [veri.md](tfod1.15.2/veri.md)):
