@@ -4,9 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Shanghai
 
 # Install apt dependencies
-RUN apt list --upgradable \
-    && apt upgrade -y \
-    && apt-get update \
+RUN apt-get update -y \
     && apt-get install -y \
     git \
     gpg-agent \
@@ -15,6 +13,7 @@ RUN apt list --upgradable \
     python3-pil \
     python3-lxml \
     python3-tk \
+    python3.6-dev \
     wget
 
 # # Add new user to avoid running as root
@@ -50,3 +49,6 @@ ENV PATH="/home/tensorflow/.local/bin:${PATH}"
 RUN pip install . --use-feature=2020-resolver -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 ENV TF_CPP_MIN_LOG_LEVEL 3
+
+# # Test the installation.
+# python object_detection/builders/model_builder_tf1_test.py
