@@ -1,3 +1,6 @@
 
 .DS_Store
 *.trt
+*.gz
+fire_det/
+mask_det/
